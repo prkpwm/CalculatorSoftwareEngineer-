@@ -16,14 +16,15 @@ class CalculatorTest {
     }
 
     const columnHeaders = [
+      "Result",
       "Description",
       "Order",
       "Has Card",
       "Expected",
       "Actual",
-      "Result",
+      "Status",
     ];
-    const columnWidths = [50, 100, 10, 10, 10, 8]; 
+    const columnWidths = [6, 50, 50, 10, 10, 10,10]; 
 
     console.log("--- Unit Tests ---");
     this.printRow(columnHeaders, columnWidths);
@@ -32,14 +33,17 @@ class CalculatorTest {
     for (const test of this.testCases) {
       try {
         const result = this.calc.calculatePrice(test.order, test.hasMemberCard);
-        const resultString = Math.abs(result - test.expected) < 0.001 ? "Passed" : "Failed";
+        const status = Math.abs(result - test.expected) < 0.001
+        const resultIcon = status ? "  ✅  " : "  ❌  ";
+        const statusString = status ? "PASS" : "FAIL";
         const row = [
+          resultIcon,
           test.description,
           JSON.stringify(test.order),
           test.hasMemberCard.toString(),
           test.expected.toFixed(2),
           result.toFixed(2),
-          resultString,
+          statusString
         ];
         this.printRow(row, columnWidths);
 
@@ -50,12 +54,12 @@ class CalculatorTest {
         }
       } catch (error) {
         const errorRow = [
+          `Error: ${error.message}`,
           test.description,
           JSON.stringify(test.order),
           test.hasMemberCard.toString(),
           "-",
           "-",
-          `Error: ${error.message}`,
         ];
         this.printRow(errorRow, columnWidths);
         failed++;
